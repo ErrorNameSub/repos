@@ -1,0 +1,58 @@
+using System;
+using System.Linq;
+
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        int x = 2;
+        int y = 3;
+        Random random = new Random();
+
+        double[] activations = new double[30]; // Массив для хранения результатов активации
+
+        for (int i = 0; i < 30; i++)
+        {
+            int z = (int) Math.Pow(Math.PI,x) + random.Next(y * 3);
+            double weightedSum = CalculateWeightedSum(z, random); // Вычисляем взвешенную сумму
+            double activation = SigmoidFunction.Sigmoid(weightedSum); // Применяем сигмоидную функцию к взвешенной сумме
+            activations[i] = activation; // Сохраняем результат активации в массив
+            Console.WriteLine("Результат = " + activation);
+        }
+
+        Console.WriteLine("\nРезультаты активации по убыванию:");
+        double[] sortedActivations = SortDescending(activations);
+        PrintArray(sortedActivations);
+        Console.WriteLine("Для завершения программы нажмите Enter...");
+        Console.ReadLine();
+    }
+
+    // Функция для вычисления взвешенной суммы
+    public static double CalculateWeightedSum(int input, Random random)
+    {
+        double bias = random.NextDouble(); // Генерируем случайное смещение
+        return input + bias; // Просто для примера, здесь можно добавить расчет взвешенной суммы
+    }
+
+    public static double[] SortDescending(double[] array)
+    {
+        return array.OrderByDescending(x => x).ToArray(); // Сортировка массива по убыванию
+    }
+
+    // Вспомогательная функция для печати массива
+    public static void PrintArray(double[] array)
+    {
+        foreach (var item in array)
+        {
+            Console.WriteLine(item);
+        }
+    }
+}
+
+public class SigmoidFunction
+{
+    public static double Sigmoid(double x)
+    {
+        return 1 / (1 + Math.Exp(-x));
+    }
+}
